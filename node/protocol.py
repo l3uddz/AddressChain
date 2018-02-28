@@ -78,6 +78,9 @@ class NodeProtocol(Protocol):
         elif packet.data.node_id == self.node_id:
             log.debug("Connected to myself, disconnecting...")
             self.transport.loseConnection()
+        elif packet.data.node_id in self.factory.peers:
+            log.debug("Already connected to node with id: %s, disconnecting...", packet.data.node_id)
+            self.transport.loseConnection()
         else:
             self.remote_node_id = packet.data.node_id
             self.remote_peer_addr = packet.data.addr
